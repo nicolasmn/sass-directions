@@ -1,0 +1,41 @@
+{
+  "name": "sass-directions",
+  "version": "1.0.0",
+  "description": "Toolset for dealing with direction shorthand lists",
+  "main": "_directions.scss",
+  "scripts": {
+    "start": "npm run test -- --watch --watch-extensions scss --reporter min",
+    "test": "mocha test",
+    "docs": "sassdoc _directions.scss -d docs --config .sassdocrc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nicolasmn/sass-directions.git"
+  },
+  "keywords": [
+    "scss",
+    "css",
+    "shorthand",
+    "function",
+    "directions",
+    "eyeglass-module"
+  ],
+  "eyeglass": {
+    "sassDir": "./_directions.scss",
+    "exports": false,
+    "needs": "^0.6.0"
+  },
+  "author": "Nicolas Müller Noulezas",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nicolasmn/sass-directions/issues"
+  },
+  "homepage": "https://github.com/nicolasmn/sass-directions#readme",
+  "devDependencies": {
+    "eyeglass": "^2.4.1",
+    "mocha": "^5.2.0",
+    "node-sass": "^4.9.2",
+    "sass-true": "^4.0.0",
+    "sassdoc": "^2.5.0"
+  }
+}

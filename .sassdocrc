@@ -1,0 +1,9 @@
+{
+  "package": {
+    "title": "Sass Directions",
+    "name": "sass-directions",
+    "homepage": "https://github.com/nicolasmn/sass-directions",
+    "description": "Toolset for dealing with direction shorthand lists"
+  },
+  "autofill": "false"
+}

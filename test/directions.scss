@@ -1,0 +1,130 @@
+$true-terminal-output: false;
+
+@import "true";
+@import "../directions";
+
+@include describe('Directions') {
+
+  @include describe('directions-assert [function]') {
+
+    @include it('Maps single values to top, right, bottom and left') {
+      $test: directions-assert(10px);
+      $expect: (top: 10px, right: 10px, bottom: 10px, left: 10px);
+      @include assert-equal($test, $expect);
+    }
+
+    @include it('Maps two values to top/bottom and left/right') {
+      $test: directions-assert(10px 20px);
+      $expect: (top: 10px, bottom: 10px, left: 20px, right: 20px);
+      @include assert-equal($test, $expect);
+    }
+
+    @include it('Maps three values to top, left/right and bottom') {
+      $test: directions-assert(10px 20px 15px);
+      $expect: (top: 10px, right: 20px, left: 20px, bottom: 15px);
+      @include assert-equal($test, $expect);
+    }
+
+    @include it('Maps four values to top, right, bottom and left') {
+      $test: directions-assert(10px 20px 15px 5px);
+      $expect: (top: 10px, right: 20px, bottom: 15px, left: 5px);
+      @include assert-equal($test, $expect);
+    }
+  }
+
+  @include describe('directions-apply [function]') {
+
+    @include it('Requires all arguments to be set') {
+      $test: directions-apply($top: 10px);
+      $expect: null;
+      @include assert-equal($test, $expect);
+    }
+
+    @include it('Converts mapped directions to shorthand list') {
+      $test: directions-apply($top: 10px, $right: 20px, $bottom: 15px, $left: 5px);
+      $expect: (10px 20px 15px 5px);
+      @include assert-equal($test, $expect);
+    }
+
+    @include it('Reduces same top/bottom values') {
+      $test: directions-apply($top: 10px, $right: 20px, $bottom: 15px, $left: 20px);
+      $expect: (10px 20px 15px);
+      @include assert-equal($test, $expect);
+    }
+
+    @include it('Reduces same top/bottom and left/right values') {
+      $test: directions-apply($top: 10px, $right: 20px, $bottom: 10px, $left: 20px);
+      $expect: (10px 20px);
+      @include assert-equal($test, $expect);
+    }
+  }
+
+  @include describe('directions-compute [function]') {
+
+    @include it('Adds a value to each direction') {
+      $test: directions-compute(10px 20px, 5px);
+      $expect: (15px 25px);
+      @include assert-equal($test, $expect);
+    }
+
+    @include it('Substracts a value from each direction') {
+      $test: directions-compute(10px 20px, -5px);
+      $expect: (5px 15px);
+      @include assert-equal($test, $expect);
+    }
+
+    @include it('Adds a value to some directions') {
+      $test: directions-compute(10px 20px, null 5px);
+      $expect: (10px 25px);
+      @include assert-equal($test, $expect);
+    }
+
+    @include it('Adds a value to a single direction') {
+      $test: directions-compute(10px 20px, null null 5px);
+      $expect: (10px 20px 15px);
+      @include assert-equal($test, $expect);
+    }
+
+    @include it('Accepts directions as map') {
+      $test: directions-compute(10px null, 5px, false);
+      $expect: (top: 15px, right: null, bottom: 15px, left: null);
+      @include assert-equal($test, $expect);
+    }
+
+    @include it('Does not add to `null` values') {
+      $test: directions-compute((top: 10px, right: null, bottom: 10px, left: null), 5px);
+      $expect: (top: 15px, right: null, bottom: 15px, left: null);
+      @include assert-equal($test, $expect);
+    }
+  }
+
+  @include describe('directions-print [mixin]') {
+
+    @include it('Prints out all directions from a list') {
+      @include assert {
+        @include output {
+          @include directions-print(margin, 10px 20px);
+        }
+        @include expect {
+          margin-top: 10px;
+          margin-right: 20px;
+          margin-bottom: 10px;
+          margin-left: 20px;
+        }
+      }
+    }
+
+    @include it('Does not print null values') {
+      @include assert {
+        @include output {
+          @include directions-print(margin, 10px null);
+        }
+        @include expect {
+          margin-top: 10px;
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+
+}

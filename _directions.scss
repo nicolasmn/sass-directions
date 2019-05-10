@@ -1,0 +1,131 @@
+////
+/// Directions
+/// @author Nicolas Müller Noulezas
+/// @group Main
+////
+
+///
+/// Map values in clock-wise positions like CSS does it. Quoting from MDN:
+/// - **One** single value applies to all **four sides**.
+/// - **Two** values apply first to **top and bottom**, the second one to **left and right**.
+/// - **Three** values apply first to **top**, second to **left and right** and third to **bottom**.
+/// - **Four** values apply to **top, right, bottom and left** in that order (clockwise).
+///
+/// @param  {List|Number|Null} $top    [null]    Shorthand list of values or single value for top
+/// @param  {Number|Null}      $right  [$top]    Value for right
+/// @param  {Number|Null}      $bottom [$top]    Value for bottom
+/// @param  {Number|Null}      $left   [$right]  Value for left
+/// @return {Map}                                Value(s) mapped to directions
+///
+/// @example scss
+///  $foo: directions-assert(10px 20px);
+///  // => { top: 10px, right: 20px, bottom: 10px, left: 20px }
+///
+@function directions-assert($top: null, $right: $top, $bottom: $top, $left: $right) {
+  @if type-of($top) == list {
+    @return directions-assert($top...);
+  }
+
+  @return (
+    top: $top,
+    right: $right,
+    bottom: $bottom,
+    left: $left
+  );
+}
+
+/// 
+/// Convert mapped directions to shorthand list
+///
+/// @param  {Map|Number} $top            Top value
+/// @param  {Number}     $right  [null]  Right value
+/// @param  {Number}     $bottom [null]  Bottom value
+/// @param  {Number}     $left   [null]  Left value
+/// @return {List}                       Shorthand list of values
+///
+/// @example scss
+///  $foo: directions-apply($top: 10px, $right: 20px, $bottom: 10px, $left: 20px);
+///  // => 10px 20px
+///
+@function directions-apply($top, $right: null, $bottom: null, $left: null) {
+  @if type-of($top) == map {
+    @return directions-apply($top...);
+  }
+
+  @if $top and $right and $bottom and $left {
+    $list: $top $right $bottom $left;
+
+    // Reduce values where possible
+    @if $right == $left {
+      $list: $top $right $bottom;
+      @if $top == $bottom {
+        $list: $top $right;
+      }
+    }
+    @return $list;
+  }
+
+  @warn "Can not apply directions with `null` values";
+  @return null;
+}
+
+///
+/// Do math with direction values
+///
+/// @param  {Map|List|Number} $values    Map, list or value of directions
+/// @param  {Map|List|Number} $summands  Map, list or value of summands
+/// @param  {Boolean}         $apply     Apply directions to shorthand list, defaults to input type of ´$values´
+/// @return {Map|List}                   Computed values as map or shorthand list
+///
+/// @example scss
+///  $foo: directions-compute(10px 20px, 5px);
+///  // => 15px 25px
+///
+@function directions-compute($values, $summands, $apply: type-of($values) == list) {
+  // Expand both arguments to asserted directions
+  $values: if(type-of($values) != map, directions-assert($values), $values);
+  $summands: if(type-of($summands) != map, directions-assert($summands), $summands);
+  // Compute the product of value and summand for each direction
+  @each $direction, $original-value in $values {
+    // Don't do calculations for falsey values (like `null`)
+    @if $original-value {
+      $value: map-get($summands, $direction);
+      $result: if($value, $original-value + $value, $original-value);
+      $values: map-merge($values, ($direction: $result));
+    }
+  }
+
+  // Return applied or mapped directions
+  @return if($apply, directions-apply($values...), $values);
+}
+
+///
+/// Print out directions in long-form
+///
+/// @param  {String}          $property  The property to print directions of
+/// @param  {Map|List|Number} $values    Map, list or value of directions
+/// @output                              
+///
+/// @example scss Input
+///  .test {
+///    @include directions-print(margin, 10px 20px)
+///  }
+/// @example css Output
+///  .test {
+///    margin-top: 10px;
+///    margin-right: 20px;
+///    margin-bottom: 10px;
+///    margin-left: 20px;
+///  }
+///
+@mixin directions-print($property, $values) {
+  $values: if(type-of($values) != map, directions-assert($values), $values);
+
+  & {
+    @each $direction, $value in $values {
+      @if $value {
+        #{$property}-#{$direction}: $value;
+      }
+    }
+  }
+}

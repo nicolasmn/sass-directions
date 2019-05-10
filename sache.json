@@ -1,0 +1,10 @@
+{
+  "name": "sass-directions",
+  "description": "Toolset for dealing with direction shorthand lists",
+  "tags": [
+    "toolset",
+    "shorthand",
+    "function",
+    "directions"
+  ]
+}
