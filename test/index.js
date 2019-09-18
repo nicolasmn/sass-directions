@@ -9,5 +9,5 @@ fs.readdirSync(testFolder).forEach(filename => {
   if (path.extname(filename) !== '.scss') return;
 
   const file = path.join(testFolder, filename);
-  sassTrue.runSass({ file }, describe, it);
+  sassTrue.runSass({ file }, { describe, it });
 });

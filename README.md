@@ -1,4 +1,4 @@
-# ♻️ Sass Directions [![Build status](https://travis-ci.org/nicolasmn/sass-directions.svg?branch=master)](https://travis-ci.org/nicolasmn/sass-directions)
+# ♻️ Sass Directions [![Build status](https://travis-ci.org/nicolasmn/sass-directions.svg?branch=master)](https://travis-ci.org/nicolasmn/sass-directions) [![Greenkeeper badge](https://badges.greenkeeper.io/nicolasmn/sass-directions.svg)](https://greenkeeper.io/)
 
 Toolset that helps dealing with direction shorthand lists.
 
