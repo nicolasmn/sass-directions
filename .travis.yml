@@ -3,7 +3,7 @@ node_js:
   - "node"
   - "lts/*"
 before_install:
-  - rvm install 2.2.2
+  - rvm install 2.3
   - npm i npx
 before_script:
   - gem install sass
