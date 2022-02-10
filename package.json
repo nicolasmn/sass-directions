@@ -34,7 +34,7 @@
   "devDependencies": {
     "eyeglass": "^3.0.0",
     "mocha": "^7.0.1",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "sass-true": "^5.0.0",
     "sassdoc": "^2.7.0"
   }
